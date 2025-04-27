@@ -1,0 +1,32 @@
+<% content_for :title, @blog_post.title %>
+<%= content_for :head do %>
+  <meta property="og:title" content="<%= @blog_post.title %>" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="<%= request.original_url %>" />
+  <meta property="og:image" content="<%= url_for(@blog_post.meta_image) if @blog_post.meta_image.attached? %>" />
+  <meta name="description" content="<%= @blog_post.meta_description %>">
+<% end %>
+
+<div class="flex flex-col w-full">
+  <div class="flex gap-2 mb-4">
+    <%= link_to "Todos os posts", blog_posts_path, class: "text-xl text-gray-900 hover:underline" %>
+    <%= link_to "> #{@blog_post.title}", blog_posts_path, class: "text-xl text-gray-900 hover:underline" %>
+  </div>
+
+  <%= image_tag(@blog_post.banner_image, class: "w-full h-64 object-cover") if @blog_post.banner_image.attached?%>
+
+  <h1 class="font-bold text-4xl"><%= @blog_post.title %></h1>
+
+  <div class="my-8 flex flex-col gap-4">
+    <div> <%= @blog_post.body %> </div>
+    <span> <strong>Tags:</strong> <%= @blog_post.tags %> </span>
+  </div>
+
+  <div class="flex items-center gap-4 mt-8">
+  <%= link_to "Editar esse post", edit_blog_post_path(@blog_post), class: "w-full sm:w-auto text-white rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 inline-block font-medium cursor-pointer" if current_admin %>
+  
+  <%= link_to "Voltar para Home", blog_posts_path, class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-200 inline-block font-medium" %>
+
+  <%= button_to "Excluir o post", @blog_post, method: :delete, form_class: "sm:inline-block", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Você tem certeza?" } if current_admin %>
+  </div>
+</div>
